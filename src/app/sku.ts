@@ -35,19 +35,7 @@ export async function getProduct(sku: string): Promise<Product> {
 			"sec-fetch-dest": 'empty',
 		}
 	})
-	
-	// const {data} = await axios({
-	// 	method: 'GET',
-	// 	url: `https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&skus=${sku}`,
-	// 	headers: {
-	// 		authority: 'www.bestbuy.ca',
-	// 		accept: '*/*',
-	// 		'accept-language': 'en-US,enq=0.9',
-	// 		"sec-fetch-site": 'same-origin',
-	// 		"sec-fetch-mode": 'cors',
-	// 		"sec-fetch-dest": 'empty',
-	// 	}
-	// })
+
 	const {availabilities} = data
 	const item = {
 		quantity: availabilities[0].shipping.quantityRemaining || 'N/A',
@@ -85,8 +73,7 @@ function shortenName(name: string): string {
 	return shortName
 }
 
-export async function validateSKU(sku:string) {
-
+export function validateSKU(sku:string) {
 	return (sku.length === 8 && sku.match(/^[0-9]+$/))
 }
 

@@ -3,8 +3,9 @@ import * as m from '../src/app/sku'
 
 const mockedGetProduct = jest.spyOn(m, 'getProduct')
 const mockedValidateSKU = jest.spyOn(m, 'validateSKU')
-mockedValidateSKU.mockImplementation(async (sku) => {
-	return sku.length === 8
+const mockedProductName = jest.spyOn(m, 'getProdName')
+mockedValidateSKU.mockImplementation((sku) => {
+	return sku.length === 8 && sku.match(/^[0-9]+$/)
 })
 
 describe('Test the SKU functions', () => {
@@ -14,8 +15,8 @@ describe('Test the SKU functions', () => {
 	})
 
 	test('Validate the SKU', async () => {
-		expect(await validateSKU('145100')).toBe(false)
-		expect(await mockedValidateSKU.getMockImplementation()('145100')).toBe(false)
+		// expect(validateSKU('145100')).toBe(false)
+		expect(mockedValidateSKU.getMockImplementation()('145100')).toBe(false)
 	})
 	
 	test('Get the product', async () => {
@@ -39,5 +40,15 @@ describe('Test the SKU functions', () => {
 			sku: '145100',
 			stockLimit: '0'
 		})
+	})
+
+	test('Get the product name', async () => {
+		mockedProductName.mockImplementation(async (_, short) => {
+			return (short ? 'Test Product' : 'Random Test Product')
+		})
+		const fn = mockedProductName.getMockImplementation()
+		expect(mockedProductName).toHaveBeenCalledTimes(0)
+		expect(await fn('https://www.bestbuy.ca/en-ca/product/145100', true)).toBe('Test Product')
+		expect(await fn('https://www.bestbuy.ca/en-ca/product/145100', false)).toBe('Random Test Product')
 	})
 })

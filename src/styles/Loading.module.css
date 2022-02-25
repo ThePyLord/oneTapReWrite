@@ -1,0 +1,43 @@
+.bar {
+	position: relative;
+	width: 50%;
+	height: 3em;
+	border-radius: 1.5em;
+	color: #fff;
+	background-color: #000;
+}
+
+.bar::before {
+	content: attr(data-label);
+	display: flex;
+	align-items: center;
+	position: absolute;
+	top: 0.5em;
+	left: 0.5em;
+	bottom: 0.5em;
+	width: calc(var(--width, 0) * 1%);
+	min-width: 2rem;
+	max-width: calc(100% - 3em);
+	/* background-color: #059; */
+	background-color: var(--colour, rgb(0, 0, 200));
+	border-radius: 1em;
+	padding: 1em;
+}
+
+.loading {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: dodgerblue;
+}
+
+.loading_text {
+	margin-bottom: 2em;
+	text-align: center;
+}
