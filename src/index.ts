@@ -63,33 +63,28 @@ ipcMain.handle("get-sku-data", async (_, sku) => {
 		return {
 			item,
 			name,
+			error: null,
 		}
 	} else {
 		return {
-			item: {
-				quantity: NaN,
-				stockInfo: "Unknown",
-				stockLimit: null,
-				imgUrl: null,
-				productUrl: null,
-				sku: sku,
-			},
-			name: "N/A",
+			item: null,
+			name: null,
+			error: new Error("Invalid SKU"),
 		}
 	}
 })
 
-ipcMain.on("app/minimize", (ev, args) => {
+ipcMain.on("app/minimize", (ev) => {
 	const win = BrowserWindow.fromWebContents(ev.sender)
 	win.minimize()
 })
 
-ipcMain.on("app/maximize", (ev, args) => {
+ipcMain.on("app/maximize", (ev) => {
 	const win = BrowserWindow.fromWebContents(ev.sender)
 	win.maximize()
 })
 
-ipcMain.on("app/close", (ev, args) => {
+ipcMain.on("app/close", (ev) => {
 	const win = BrowserWindow.fromWebContents(ev.sender)
 	win.close()
 })

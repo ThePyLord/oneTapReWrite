@@ -19,14 +19,14 @@ function LoadingScreen({
 			bar.style.setProperty("--colour", `rgb(0, ${Math.floor(width * 2)}, 120)`)
 			if (width > 100) clearInterval(interval)
 		}, 5)
-		const bar = document.getElementById("bar")
-		const compStyle = getComputedStyle(bar).getPropertyValue("--width")
-		const w = parseInt(compStyle) || 0
-		console.log(`The width is ${w}`)
+		// const bar = document.getElementById("bar")
+		// const compStyle = getComputedStyle(bar).getPropertyValue("--width")
+		// const w = parseInt(compStyle) || 0
+		// console.log(`The width is ${w}`)
 
-		const total = skus.length
-		bar.style.setProperty("--width", `${((w + completed) / total) * 100}`)
-		bar.dataset.label = `${(w + completed) / total}%`
+		// const total = skus.length
+		// bar.style.setProperty("--width", `${((w + completed) / total) * 100}`)
+		// bar.dataset.label = `${(w + completed) / total}%`
 		console.log(`There's ${completed} skus loaded`)
 	})
 	return (

@@ -5,8 +5,12 @@
 ### Stuff to fix
 
 - Properly handle CSS modules (DONE)
-- Prevent duplicate SKUs from being added to the list
+- Prevent duplicate SKUs from being added to the list(DONE)
 - Get the loader to work with every new component's addition.
+
+### Possible additions/improvements
+
+- Add the rating to each product
 
 ### Additions/Updates
 
