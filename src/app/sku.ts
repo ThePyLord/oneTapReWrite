@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import axios from "axios"
-import { load } from "cheerio"
+import axios from 'axios'
+// import { Blob } from 'node:buffer'
+// import { URL } from 'node:url'
+// import fs from 'fs'
+import { load } from 'cheerio'
 
 /**
  * @typedef {Object} Product
@@ -25,35 +28,41 @@ export interface Product {
  */
 export async function getProduct(sku: string): Promise<Product> {
 	const url =
-		"https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&skus=" +
+		'https://www.bestbuy.ca/ecomm-api/availability/products?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson&accept-language=en-CA&skus=' +
 		sku
-	const { data } = await axios.get(url, {
+	const { data, status } = await axios.get(url, {
 		headers: {
-			authority: "www.bestbuy.ca",
-			accept: "*/*",
-			"accept-language": "en-US,enq=0.9",
-			"sec-fetch-site": "same-origin",
-			"sec-fetch-mode": "cors",
-			"sec-fetch-dest": "empty",
+			authority: 'www.bestbuy.ca',
+			accept: '*/*',
+			'accept-language': 'en-US,enq=0.9',
+			'sec-fetch-site': 'same-origin',
+			'sec-fetch-mode': 'cors',
+			'sec-fetch-dest': 'empty',
 		},
 	})
-
-	const { availabilities } = data
-	const item = {
-		quantity: availabilities[0].shipping.quantityRemaining || "N/A",
-		stockInfo: availabilities[0]["shipping"]["status"],
-		stockLimit: availabilities[0]["shipping"]["orderLimit"],
-		imgUrl: `https://multimedia.bbycastatic.ca/multimedia/products/500x500/${availabilities[
-			"0"
-		]["sku"]
-			.toString()
-			.substr(0, 3)}/${availabilities["0"]["sku"].toString().substr(0, 5)}/${
-			availabilities["0"]["sku"]
-		}.jpg`,
-		productUrl: `https://www.bestbuy.ca/en-ca/product/${availabilities["0"]["sku"]}`,
-		sku: availabilities["0"]["sku"],
+	if(status === 200) {
+		const { availabilities } = data
+		const item = {
+			quantity: availabilities[0].shipping.quantityRemaining || 'N/A',
+			stockInfo: availabilities[0]['shipping']['status'],
+			stockLimit: availabilities[0]['shipping']['orderLimit'],
+			imgUrl: '', // setting imgUrl to empty string for now, will be set later
+			productUrl: `https://www.bestbuy.ca/en-ca/product/${availabilities['0']['sku']}`,
+			sku: availabilities['0']['sku'],
+		}
+		// set img url using product url
+		item.imgUrl = await extractImgUrl(item.productUrl)
+		// console.log('url:', item.productUrl)
+		const request = await axios.post('http://localhost:5000/remove_bg', {
+			url: item.imgUrl,
+			message: `Removing background from ${item.sku}`,
+		})
+		item.imgUrl = request.data.image
+		return item
+	} else {
+		return null
 	}
-	return item
+	// return item
 }
 
 /**
@@ -65,7 +74,7 @@ export async function getProduct(sku: string): Promise<Product> {
 export async function getProdName(url: string, short = true) {
 	const { data } = await axios.get(url)
 	const $ = load(data)
-	const prodName = $("h1").text()
+	const prodName = $('h1').text()
 	if (short) return shortenName(prodName)
 	else return prodName
 }
@@ -75,10 +84,39 @@ export async function getProdName(url: string, short = true) {
  * @returns {string} The shortened name of the product
  */
 function shortenName(name: string): string {
-	const shortName = name.split(" ").slice(0, 4).join().replace(/,/g, " ")
+	const shortName = name.split(' ').slice(0, 4).join().replace(/,/g, ' ')
 	return shortName
 }
 
+/**
+ * Extracts the image url from the product page
+ * @param raw_url The raw url of the product
+ * @returns The url of the product image
+ */
+async function extractImgUrl(raw_url: string) {
+	const base_url = 'https://multimedia.bbycastatic.ca/multimedia/products/500x500/'
+	// console.log('raw_url:', raw_url)
+	const resp = await axios.get(raw_url)
+	const $ = load(resp.data)
+	const soldBy = $('.reviewsContainer_2ANi3')
+		.next()
+		.children()
+		.first()
+	const classList = soldBy.attr('class').split(/\s+/)
+	let ext: string
+	if (classList?.some((c) => c.startsWith('soldByBestBuy_'))) {
+		ext = '.jpg'
+	}
+	else {
+		ext = '.jpeg'
+	}
+
+	const sku = raw_url.split('/').pop()
+	const first3 = sku.substring(0, 3)
+	const first5 = sku.substring(0, 5)
+	const imgUrl = `${base_url}${first3}/${first5}/${sku}${ext}`
+	return imgUrl
+}
 /**
  * basic SKU validation, will fail for some SKUs
  * @todo: Update the validation to allow characters other than numbers
@@ -89,18 +127,19 @@ export function validateSKU(sku: string) {
 	return sku.length === 8 && sku.match(/^[0-9]+$/)
 }
 
-const testSkus = [
-	"14575596",
-	"14583636",
-	"15317229",
-	"15178453",
-	"13444247",
-	"15615205",
-	"15317355",
-	"15736356",
-]
+function main() {
+	extractImgUrl('https://www.bestbuy.ca/en-ca/product/15645757')
+	// extractImgUrl('https://www.bestbuy.ca/en-ca/product/sony-playstation-5-console/14962185')
+}
 
-// async function main() {
-// 	console.log(await getProduct("15614016"))
-// }
-// main()
+main()
+// const testSkus = [
+// 	'14575596',
+// '14583636',
+// '15317229',
+// 	'15178453',
+// 	'13444247',
+// 	'15615205',
+// 	'15317355',
+// 	'15736356',
+// ]

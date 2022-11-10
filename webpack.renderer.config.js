@@ -12,7 +12,18 @@ rules.push({
       loader: "file-loader",
     },
   ],
-});
+  type: 'javascript/auto'
+},
+{
+  test: /\.(mp3|wav)$/i,
+  use: [
+    {
+      loader: "file-loader",
+    },
+  ],
+  type: 'javascript/auto'
+}
+);
 
 module.exports = {
   module: {

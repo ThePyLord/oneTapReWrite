@@ -89,3 +89,12 @@ typings/
 out/
 
 package-lock.json
+
+# Python
+*.pyc
+*.pyo
+.__pycache__/
+
+
+# Pycharm
+.idea/

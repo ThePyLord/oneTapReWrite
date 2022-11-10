@@ -1,23 +1,15 @@
-/**
- * /* @import url('../lib/proto-css/main.css');
- *
- * @format
- */
-
-@import url("./styles/proto-css/main.css");
+@import url("../lib/proto-css/main.css");
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
   margin: auto;
   padding: 2rem;
-
   background-color: rgba(200, 192, 114, 0.438);
 }
 
 #cards {
   padding: 20px 10px;
-
   display: grid;
   grid-template-columns: 50% 50%;
   justify-items: center;
@@ -58,7 +50,7 @@ body {
   height: 2rem;
   border-radius: 5%;
 }
-
+/* 
 .card {
   width: 30rem;
   text-align: center;
@@ -67,20 +59,15 @@ body {
   border-radius: 3px;
   transition: background-color 0.2s ease-in-out;
 }
+ */
 
-.card:hover {
-  /* cursor: ; */
-  background-color: rgb(233, 232, 232);
-}
 
 .product-name {
   color: brown;
   size: 100px;
 }
 
-.product-image {
-  border-radius: 5px;
-}
+
 
 @media only screen and (max-width: 700px) {
   #cards {
@@ -94,4 +81,8 @@ img {
   height: 10rem;
   width: 10rem;
   border-radius: 5%;
+}
+
+#audio {
+  visibility: hidden;
 }

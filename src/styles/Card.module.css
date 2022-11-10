@@ -1,15 +1,42 @@
 .remove {
-  border-radius: 50%;
-  cursor: pointer;
-  height: 25px;
-  width: 25px;
-  display: inline-block;
-  color: black;
-  transition: background-color 0.2s ease-in-out;
-  margin-left: 98%;
+	border-radius: 50%;
+	cursor: pointer;
+	height: 25px;
+	width: 25px;
+	display: inline-block;
+	color: black;
+	transition: background-color 0.2s ease-in-out;
+	margin-left: 98%;
+	user-select: none;
 }
 
 .remove:hover {
-  background-color: #f00;
-  color: #fff;
+	background-color: #f00;
+	color: #fff;
+}
+
+.card {
+	width: 25rem;
+	text-align: center;
+	margin: 20px;
+	padding: 10px 20px;
+	border-radius: 3px;
+	background-color: rgb(223, 220, 220);
+	transition: background-color 0.2s ease-in-out;
+}
+
+.card:hover {
+
+	background-color: rgb(191, 188, 188);
+}
+
+.productName {
+	color: brown;
+	font-size: 1.4rem;
+}
+
+.productImage {
+	user-select: none;
+	border-radius: 5px;
+	-webkit-user-drag: none;
 }

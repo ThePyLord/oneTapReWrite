@@ -22,7 +22,7 @@ function CardContainer(props: CardProps): JSX.Element {
 						"https://cdn.discordapp.com/attachments/789345259011178548/943308990685773854/Activities3305.png",
 					quantity: 10,
 				}}
-				event={props.event}
+				onDelete={props.onDelete}
 			/>
 		</div>
 	)

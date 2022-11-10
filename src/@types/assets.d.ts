@@ -1,6 +1,13 @@
-declare module "*.jpg" {
+declare module '*.jpg' {
 	const value: any
-	export = value
+	export default value
 }
-declare module "*.png"
-declare module "*.svg"
+declare module '*.png'
+declare module '*.svg'
+
+
+// declare a module for audio files
+declare module '*.mp3' {
+	const src: string
+	export default src
+}
